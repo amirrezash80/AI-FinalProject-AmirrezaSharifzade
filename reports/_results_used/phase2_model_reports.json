@@ -1,0 +1,160 @@
+{
+  "seed": 42,
+  "raw_target_col": "Class",
+  "target_mapping": "numeric_binary(1->0, 2->1)",
+  "drop_duration": true,
+  "models_included": [
+    "LogReg",
+    "KNN",
+    "SVM-RBF",
+    "RandomForest"
+  ],
+  "comparison_table": "results/tables/phase2_model_comparison.csv",
+  "reports": {
+    "LogReg": {
+      "valid": {
+        "accuracy": 0.8421809334218093,
+        "precision": 0.4103062712688381,
+        "recall": 0.7977315689981096,
+        "f1": 0.5418940609951846,
+        "roc_auc": 0.9044387214883454,
+        "confusion_matrix": [
+          [
+            6771,
+            1213
+          ],
+          [
+            214,
+            844
+          ]
+        ]
+      },
+      "test": {
+        "accuracy": 0.8376644918721663,
+        "precision": 0.401252408477842,
+        "recall": 0.7873345935727788,
+        "f1": 0.5315890236119974,
+        "roc_auc": 0.9016757554630433,
+        "confusion_matrix": [
+          [
+            6742,
+            1243
+          ],
+          [
+            225,
+            833
+          ]
+        ]
+      }
+    },
+    "KNN": {
+      "valid": {
+        "accuracy": 0.8985843839858438,
+        "precision": 0.650319829424307,
+        "recall": 0.2882797731568998,
+        "f1": 0.3994760969220694,
+        "roc_auc": 0.8866761760761599,
+        "confusion_matrix": [
+          [
+            7820,
+            164
+          ],
+          [
+            753,
+            305
+          ]
+        ]
+      },
+      "test": {
+        "accuracy": 0.8977109366360722,
+        "precision": 0.6487695749440716,
+        "recall": 0.2741020793950851,
+        "f1": 0.3853820598006645,
+        "roc_auc": 0.8715608069478099,
+        "confusion_matrix": [
+          [
+            7828,
+            157
+          ],
+          [
+            768,
+            290
+          ]
+        ]
+      }
+    },
+    "SVM-RBF": {
+      "valid": {
+        "accuracy": 0.9001327140013271,
+        "precision": 0.6010430247718384,
+        "recall": 0.43572778827977315,
+        "f1": 0.5052054794520547,
+        "roc_auc": 0.9202060193165159,
+        "confusion_matrix": [
+          [
+            7678,
+            306
+          ],
+          [
+            597,
+            461
+          ]
+        ]
+      },
+      "test": {
+        "accuracy": 0.9039035718235099,
+        "precision": 0.6289222373806276,
+        "recall": 0.43572778827977315,
+        "f1": 0.5147962032384142,
+        "roc_auc": 0.9164404430329552,
+        "confusion_matrix": [
+          [
+            7713,
+            272
+          ],
+          [
+            597,
+            461
+          ]
+        ]
+      }
+    },
+    "RandomForest": {
+      "valid": {
+        "accuracy": 0.9022340190223402,
+        "precision": 0.6899563318777293,
+        "recall": 0.29867674858223064,
+        "f1": 0.41688654353562005,
+        "roc_auc": 0.9259445758246171,
+        "confusion_matrix": [
+          [
+            7842,
+            142
+          ],
+          [
+            742,
+            316
+          ]
+        ]
+      },
+      "test": {
+        "accuracy": 0.9044564856795311,
+        "precision": 0.6995884773662552,
+        "recall": 0.32136105860113423,
+        "f1": 0.44041450777202074,
+        "roc_auc": 0.9213464991660876,
+        "confusion_matrix": [
+          [
+            7839,
+            146
+          ],
+          [
+            718,
+            340
+          ]
+        ]
+      }
+    }
+  },
+  "note": "If XGBoost import fails on your environment, it will be skipped automatically."
+}

@@ -1,0 +1,40 @@
+{
+  "dataset": "tabular",
+  "raw_target_col": "Class",
+  "target_mapping": "numeric_binary(1->0, 2->1)",
+  "drop_duration": true,
+  "valid": {
+    "accuracy": 0.8421809334218093,
+    "precision": 0.4103062712688381,
+    "recall": 0.7977315689981096,
+    "f1": 0.5418940609951846,
+    "roc_auc": 0.9044387214883454,
+    "confusion_matrix": [
+      [
+        6771,
+        1213
+      ],
+      [
+        214,
+        844
+      ]
+    ]
+  },
+  "test": {
+    "accuracy": 0.8376644918721663,
+    "precision": 0.401252408477842,
+    "recall": 0.7873345935727788,
+    "f1": 0.5315890236119974,
+    "roc_auc": 0.9016757554630433,
+    "confusion_matrix": [
+      [
+        6742,
+        1243
+      ],
+      [
+        225,
+        833
+      ]
+    ]
+  }
+}

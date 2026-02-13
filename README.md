@@ -120,27 +120,8 @@ python -m src.training.train_baseline --out_dir results
 
 ---
 
-## 7) قوانین GitHub و نحوه‌ی توسعه
 
-### نام ریپو
-`AI-FinalProject-<GroupName>`
-
-### Branch ها
-- فاز اول: `phase-1`
-- فاز دوم: `phase-2`
-
-هر فاز روی برنچ خودش توسعه داده می‌شود و بعد از تکمیل با Pull Request به `main` مرج می‌شود.
-
-### Commit های معنادار
-در هر فاز حداقل ۵ commit معنادار می‌زنم.  
-نمونه پیام‌های قابل قبول:
-- `Add Phase-1 EDA notebook with exploratory plots and findings`
-- `Implement preprocessing pipeline with stratified split and feature engineering`
-- `Add Logistic Regression baseline training with ROC/CM plots`
-
----
-
-## 8) پلن فاز دوم (خلاصه)
+## 7) پلن فاز دوم (خلاصه)
 
 در فاز دوم:
 - پیاده‌سازی و مقایسه‌ی مدل‌ها:
