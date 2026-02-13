@@ -1,0 +1,16 @@
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.ipynb_checkpoints/
+
+# local data & artifacts (do not commit)
+data/raw/
+data/processed/
+models/
+results/
+
+# OS
+.DS_Store
