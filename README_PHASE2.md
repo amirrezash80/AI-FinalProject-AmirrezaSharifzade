@@ -74,6 +74,84 @@ python -m src.inference.predict_csv --input_csv data/raw/bank_marketing.csv --ou
 
 ---
 
+---
+
+## 6) تصاویر کلیدی (برای ارائه)
+
+> مسیر پیشنهادی: فایل‌ها داخل `results/figures/` ذخیره می‌شوند و این README همان مسیر را reference می‌کند.
+
+**Baseline LogReg — Confusion Matrix (Valid)**
+
+![](results/figures/baseline_logreg_cm_valid.png)
+
+**Baseline LogReg — Confusion Matrix (Test)**
+
+![](results/figures/baseline_logreg_cm_test.png)
+
+**Baseline LogReg — ROC (Valid)**
+
+![](results/figures/baseline_logreg_roc_valid.png)
+
+**Baseline LogReg — ROC (Test)**
+
+![](results/figures/baseline_logreg_roc_test.png)
+
+**KNN — Confusion Matrix (Valid)**
+
+![](results/figures/KNN_cm_valid.png)
+
+**KNN — Confusion Matrix (Test)**
+
+![](results/figures/KNN_cm_test.png)
+
+**KNN — ROC (Valid)**
+
+![](results/figures/KNN_roc_valid.png)
+
+**KNN — ROC (Test)**
+
+![](results/figures/KNN_roc_test.png)
+
+**LogReg (Tuned) — Confusion Matrix (Valid)**
+
+![](results/figures/LogReg_cm_valid.png)
+
+**LogReg (Tuned) — Confusion Matrix (Test)**
+
+![](results/figures/LogReg_cm_test.png)
+
+**LogReg (Tuned) — ROC (Valid)**
+
+![](results/figures/LogReg_roc_valid.png)
+
+**LogReg (Tuned) — ROC (Test)**
+
+![](results/figures/LogReg_roc_test.png)
+
+**LogReg — Top-20 |coef|**
+
+![](results/figures/LogReg_coef_top20.png)
+
+**RandomForest — Confusion Matrix (Valid)**
+
+![](results/figures/RandomForest_cm_valid.png)
+
+**RandomForest — Confusion Matrix (Test)**
+
+![](results/figures/RandomForest_cm_test.png)
+
+**RandomForest — ROC (Valid)**
+
+![](results/figures/RandomForest_roc_valid.png)
+
+**RandomForest — ROC (Test)**
+
+![](results/figures/RandomForest_roc_test.png)
+
+**RandomForest — Top-20 Feature Importance**
+
+![](results/figures/RandomForest_feature_importance_top20.png)
+
 ## نتیجه نهایی (خلاصه)
 
 - Best model (بعد از tuning): **RandomForest**

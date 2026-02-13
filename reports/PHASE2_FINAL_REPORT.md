@@ -42,17 +42,99 @@
 
 ---
 
-## 4) مقایسه‌ی مدل‌ها (بدون Tuning)
+## 4) مقایسه مدل‌ها (Baselineها و Phase-2)
 
-در مقایسه‌ی اولیه (با تنظیمات پیش‌فرض):
+در این فاز، ۴ مدل را روی مجموعه‌ی **Valid** و **Test** مقایسه کردم: Logistic Regression (Baseline)، KNN، Random Forest و SVM-RBF.
+برای یک مقایسه‌ی سریع، جدول زیر را از خروجی `phase2_model_comparison.csv` گذاشتم (همه‌ی F1ها در این جدول با آستانه‌ی پیش‌فرض 0.5 گزارش شده‌اند):
 
-- **KNN** دقت (Accuracy) بالایی داشت، اما Recall پایین → برای کلاس مثبت، نمونه‌های زیادی را از دست می‌داد.  
-- **SVM-RBF** ROC-AUC خوبی داشت و نسبت به KNN Recall بهتر بود.  
-- **Random Forest** در این مرحله Precision بالا ولی Recall پایین داشت (threshold=0.5 باعث محافظه‌کاری می‌شد).
+| مدل | AUC (Valid) | F1 (Valid @0.5) | AUC (Test) | F1 (Test @0.5) |
+|---|---:|---:|---:|---:|
+| LogReg | 0.904 | 0.542 | 0.902 | 0.532 |
+| SVM-RBF | 0.920 | 0.505 | 0.916 | 0.515 |
+| RandomForest | 0.926 | 0.417 | 0.921 | 0.440 |
+| KNN | 0.887 | 0.399 | 0.872 | 0.385 |
 
-(جدول و گزارش کامل در فایل‌های خروجی ذخیره شده است.)
 
----
+**برداشت من از جدول بالا:**  
+- از نظر **AUC**، مدل‌های **RandomForest** و **SVM-RBF** تقریباً بهترین هستند (حدود 0.92).  
+- از نظر **F1 با آستانه‌ی 0.5**، **LogReg** کمی بهتر از بقیه می‌افتد، ولی در عوض تعداد **False Positive**‌هایش زیادتر است (precision پایین‌تر).  
+- چون داده نامتوازن است، عدد AUC به تنهایی کافی نیست و در عمل **انتخاب آستانه** خیلی روی F1/recall/precision اثر می‌گذارد (که در بخش 6 انجامش دادم).
+
+### 4.2) نمودارهای مدل‌ها (Confusion Matrix / ROC / اهمیت ویژگی‌ها)
+
+برای اینکه فقط به عددها اکتفا نکنم، خروجی‌های تصویری هر مدل را هم در پوشه‌ی `figures/` گذاشتم و اینجا لینکشان را قرار دادم.  
+(این تصاویر دقیقاً همان‌هایی هستند که در خروجی کد تولید شده‌اند.)
+
+#### Logistic Regression (Baseline)
+- Confusion Matrix (Valid):  
+![](../figures/baseline_logreg_cm_valid.png)
+
+- Confusion Matrix (Test):  
+![](../figures/baseline_logreg_cm_test.png)
+
+- ROC (Valid):  
+![](../figures/baseline_logreg_roc_valid.png)
+
+- ROC (Test):  
+![](../figures/baseline_logreg_roc_test.png)
+
+#### KNN
+- Confusion Matrix (Valid):  
+![](../figures/KNN_cm_valid.png)
+
+- Confusion Matrix (Test):  
+![](../figures/KNN_cm_test.png)
+
+- ROC (Valid):  
+![](../figures/KNN_roc_valid.png)
+
+- ROC (Test):  
+![](../figures/KNN_roc_test.png)
+
+#### Logistic Regression (Phase-2)
+- Confusion Matrix (Valid):  
+![](../figures/LogReg_cm_valid.png)
+
+- Confusion Matrix (Test):  
+![](../figures/LogReg_cm_test.png)
+
+- ROC (Valid):  
+![](../figures/LogReg_roc_valid.png)
+
+- ROC (Test):  
+![](../figures/LogReg_roc_test.png)
+
+- Top-20 Coefficients:  
+![](../figures/LogReg_coef_top20.png)
+
+#### Random Forest (Phase-2)
+- Confusion Matrix (Valid):  
+![](../figures/RandomForest_cm_valid.png)
+
+- Confusion Matrix (Test):  
+![](../figures/RandomForest_cm_test.png)
+
+- ROC (Valid):  
+![](../figures/RandomForest_roc_valid.png)
+
+- ROC (Test):  
+![](../figures/RandomForest_roc_test.png)
+
+- Top-20 Feature Importance:  
+![](../figures/RandomForest_feature_importance_top20.png)
+
+#### SVM-RBF
+- Confusion Matrix (Valid):  
+![](../figures/SVM-RBF_cm_valid.png)
+
+- Confusion Matrix (Test):  
+![](../figures/SVM-RBF_cm_test.png)
+
+- ROC (Valid):  
+![](../figures/SVM-RBF_roc_valid.png)
+
+- ROC (Test):  
+![](../figures/SVM-RBF_roc_test.png)
 
 ## 5) Hyperparameter Tuning و انتخاب بهترین مدل
 
@@ -90,33 +172,48 @@
 
 ---
 
-## 6) Threshold Tuning + Calibration (sigmoid)
+## 6) Threshold Tuning + Calibration (Final Best Pipeline)
 
-روی Validation یک sweep انجام دادم و سپس threshold بهینه را برای بیشینه کردن F1 انتخاب کردم:
+چون دیتاست نامتوازن است، استفاده از آستانه‌ی ثابت 0.5 همیشه بهترین تصمیم نیست. برای همین، من برای **بهترین پایپ‌لاین نهایی** این کارها را انجام دادم:
 
-- **Calibration**: `sigmoid`
-- **Best Threshold (on Valid)**: 0.22
-- (Valid) Precision=0.498, Recall=0.770, F1=0.605
+1) **کالیبراسیون** احتمال‌ها با روش **Sigmoid** (روی Valid)  
+2) **جست‌وجوی آستانه** روی Valid با معیار **F1** و انتخاب آستانه‌ی بهینه
 
-### مقایسه روی Test: threshold=0.5 vs threshold بهینه
+نتیجه‌ی انتخاب آستانه روی **Valid**:
+- آستانه‌ی بهینه روی Valid: **thr ≈ 0.22**
+- (Valid) Precision: **0.498**
+- (Valid) Recall: **0.770**
+- (Valid) F1: **0.605**
 
-**Test @0.5**
-- Accuracy=0.905
-- Precision=0.635
-- Recall=0.443
-- F1=0.522
-- ROC-AUC=0.921
+ارزیابی روی **Test**:
+- با thr=0.50 → Precision **0.635** / Recall **0.443** / F1 **0.522**
+- با thr≈0.22 → Precision **0.492** / Recall **0.743** / F1 **0.592**
 
-**Test @best_threshold (0.22)**
-- Accuracy=0.880
-- Precision=0.492
-- Recall=0.743
-- F1=0.592
-- ROC-AUC=0.921
+نکته‌ی مهم: **AUC** با تغییر آستانه تغییر نمی‌کند و برای Test حدود **0.921** است، اما با انتخاب آستانه‌ی درست می‌توانم trade-off بین precision و recall را مطابق نیاز پروژه تنظیم کنم.
 
-**Trade-off:** threshold=0.5 → Precision/Accuracy بهتر، threshold بهینه → Recall/F1 بهتر.
+### 6.1) نمودارهای کالیبراسیون، ROC/PR و انتخاب آستانه
 
----
+- Calibration Curve (Valid) — بعد از کالیبراسیون Sigmoid:  
+![](../figures/phase2_calibration_curve_valid.png)
+
+- ROC (Valid) برای Best Pipeline:  
+![](../figures/phase2_roc_valid_bestpipe.png)
+
+- Precision–Recall (Valid) (AP≈0.61):  
+![](../figures/phase2_pr_curve_valid.png)
+
+- F1 vs Threshold (Valid) — برای پیدا کردن آستانه‌ی بهینه (حدود 0.22):  
+![](../figures/phase2_f1_vs_threshold_valid.png)
+
+- Confusion Matrix روی Test با آستانه‌های مختلف:  
+  - thr=0.50  
+![](../figures/phase2_cm_test_threshold_0.5.png)
+
+  - thr=0.22 (بهینه روی Valid)  
+![](../figures/phase2_cm_test_threshold_0.22.png)
+
+  - thr=0.49 (نزدیک به 0.5 ولی با trade-off متفاوت)  
+![](../figures/phase2_cm_test_threshold_0.49.png)
 
 ## 7) نتیجه‌ی نهایی (Final Decision)
 
