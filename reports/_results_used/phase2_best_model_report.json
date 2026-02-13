@@ -1,0 +1,56 @@
+{
+  "seed": 42,
+  "raw_target_col": "Class",
+  "target_mapping": "numeric_binary(1->0, 2->1)",
+  "drop_duration": true,
+  "selection_metric": "f1",
+  "best_model": "RandomForest",
+  "best_cv_score": 0.591065232428769,
+  "best_params": {
+    "model__max_depth": 20,
+    "model__max_features": "sqrt",
+    "model__min_samples_leaf": 3,
+    "model__min_samples_split": 6,
+    "model__n_estimators": 846
+  },
+  "valid": {
+    "accuracy": 0.8865295288652952,
+    "precision": 0.5104438642297651,
+    "recall": 0.7391304347826086,
+    "f1": 0.6038610038610038,
+    "roc_auc": 0.9252327907232234,
+    "confusion_matrix": [
+      [
+        7234,
+        750
+      ],
+      [
+        276,
+        782
+      ]
+    ]
+  },
+  "test": {
+    "accuracy": 0.8853256662611965,
+    "precision": 0.5070517125587642,
+    "recall": 0.7136105860113422,
+    "f1": 0.5928543384373773,
+    "roc_auc": 0.9213835487853524,
+    "confusion_matrix": [
+      [
+        7251,
+        734
+      ],
+      [
+        303,
+        755
+      ]
+    ]
+  },
+  "notes": {
+    "cv": 3,
+    "n_iter_per_model": 30,
+    "xgboost_included": false,
+    "scipy_distributions": true
+  }
+}
