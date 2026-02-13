@@ -18,8 +18,9 @@ def to_binary_target(y: pd.Series, pos_label: str | None = "yes") -> tuple[pd.Se
 
     - If values include yes/no -> yes=1
     - If values include true/false -> true=1
+    - If numeric with exactly 2 unique values -> map min->0, max->1
     - If numeric 0/1 -> keep
-    - Else: pick the *rarer* class as positive (common in imbalanced settings)
+    - Else (fallback): pick the *rarer* class as positive
 
     Returns (y_bin, info_dict)
     """
@@ -29,12 +30,22 @@ def to_binary_target(y: pd.Series, pos_label: str | None = "yes") -> tuple[pd.Se
     # try numeric
     s_num = pd.to_numeric(s, errors="coerce")
     if s_num.notna().all():
-        uniq = sorted(s_num.unique().tolist())
+        uniq = sorted(pd.unique(s_num).tolist())
+        info["numeric_unique"] = uniq
+
         if set(uniq).issubset({0, 1}):
             info["mapping"] = "numeric(0/1)"
             return s_num.astype(int), info
-        info["mapping"] = "numeric(>0 as positive)"
-        return (s_num > 0).astype(int), info
+
+        if len(uniq) == 2:
+            lo, hi = uniq[0], uniq[1]
+            info["mapping"] = f"numeric_binary({lo}->0, {hi}->1)"
+            return (s_num == hi).astype(int), info
+
+        # If more than 2 numeric classes, treat as binary with > median (rare)
+        med = float(np.median(s_num))
+        info["mapping"] = f"numeric(>median={med} as positive)"
+        return (s_num > med).astype(int), info
 
     s_str = s.astype(str).str.strip().str.lower()
     uniq = set(s_str.unique().tolist())
@@ -99,6 +110,7 @@ def main() -> None:
         "seed": args.seed,
         "raw_target_col": used_target,
         "target_mapping": y_info.get("mapping"),
+        "numeric_unique": y_info.get("numeric_unique"),
         "unique_labels": y_info.get("unique_labels"),
         "drop_duration": drop_duration,
         "n_train": int(len(split.y_train)),

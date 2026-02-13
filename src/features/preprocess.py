@@ -5,27 +5,26 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer, make_column_selector as selector
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import OneHotEncoder, StandardScaler, FunctionTransformer
 
 from src.features.cleaning import normalize_unknowns, ensure_types
 from src.features.feature_builder import BankFeatureBuilder
+
+def clean_df(X):
+    """Top-level function (pickleable) used by FunctionTransformer."""
+    if isinstance(X, pd.DataFrame):
+        X2 = ensure_types(X)
+        X2 = normalize_unknowns(X2)
+        return X2
+    X2 = pd.DataFrame(X)
+    X2 = ensure_types(X2)
+    X2 = normalize_unknowns(X2)
+    return X2
 
 def build_preprocess_pipeline(drop_duration: bool = True) -> Pipeline:
     """Full preprocessing pipeline:
     Cleaning -> Feature Engineering -> ColumnTransformer(num/cat)
     """
-
-    def _clean_df(X):
-        if isinstance(X, pd.DataFrame):
-            X2 = ensure_types(X)
-            X2 = normalize_unknowns(X2)
-            return X2
-        # fallback: convert to DF
-        X2 = pd.DataFrame(X)
-        X2 = ensure_types(X2)
-        X2 = normalize_unknowns(X2)
-        return X2
-
     numeric_pipe = Pipeline(steps=[
         ("imputer", SimpleImputer(strategy="median")),
         ("scaler", StandardScaler()),
@@ -46,11 +45,8 @@ def build_preprocess_pipeline(drop_duration: bool = True) -> Pipeline:
     )
 
     pipe = Pipeline(steps=[
-        ("clean", FunctionTransformer(_clean_df, validate=False)),
+        ("clean", FunctionTransformer(clean_df, validate=False)),
         ("feat", BankFeatureBuilder(drop_duration=drop_duration)),
         ("preprocess", pre),
     ])
     return pipe
-
-# sklearn's FunctionTransformer import (kept here to avoid circular imports)
-from sklearn.preprocessing import FunctionTransformer
